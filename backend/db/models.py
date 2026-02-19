@@ -24,6 +24,7 @@ class QueryHistory(Base):
     user_id = Column(Integer)
     question = Column(Text)
     sql_query = Column(Text)
+    query_hash = Column(String(64))
     created_at = Column(TIMESTAMP, server_default=func.now())
 
 

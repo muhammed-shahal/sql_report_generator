@@ -22,7 +22,10 @@ CREATE TABLE query_history (
     user_id INT,
     question TEXT,
     sql_query TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    query_hash VARCHAR(64),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    UNIQUE KEY unique_user_query (user_id, query_hash)
 );
 
 -- EXPORT JOBS (ETL tracking)
@@ -33,8 +36,7 @@ CREATE TABLE export_jobs (
     sql_query TEXT,
     status VARCHAR(50),
     file_path TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(user_id, query_hash)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- ANALYTICS TABLES
