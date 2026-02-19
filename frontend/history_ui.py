@@ -27,10 +27,13 @@ def history_tab():
             if col2.button(f"Export {q['id']}"):
                 res = export_history(st.session_state.token, q["id"])
                 if res.status_code == 200:
-                    # show message if exists, otherwise fallback
                     data = res.json()
                     msg = data.get("message", "Export started!")
 
-                    st.success(msg)
+                    # If backend says it's not actually successful
+                    if "success" in msg.lower():
+                        st.success(msg)
+                    else:
+                        st.error(msg)
                 else:
                     st.error("Export failed")

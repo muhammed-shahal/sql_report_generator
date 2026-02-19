@@ -38,11 +38,14 @@ def chat_tab():
             )
 
             if res.status_code == 200:
-                st.success("Export started!")
-                # show message if exists, otherwise fallback
                 data = res.json()
                 msg = data.get("message", "Export started!")
 
-                st.success(msg)
+                # If backend says it's not actually successful
+                if "success" in msg.lower():
+                    st.success(msg)
+                else:
+                    st.error(msg)
+
             else:
                 st.error("Export failed")
