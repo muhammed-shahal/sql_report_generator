@@ -2,6 +2,7 @@ import pandas as pd
 from sqlalchemy import text
 from backend.db.database import engine, SessionLocal
 from backend.db.models import ExportJob
+from backend.utils.sql_cleaner import clean_sql
 
 EXPORT_DIR = "exports"
 
@@ -13,6 +14,9 @@ def run_export_job(job_id: int, user_id: int, sql: str):
         job = db.query(ExportJob).get(job_id)
         job.status = "running"
         db.commit()
+
+        # clean sql
+        sql = clean_sql(sql)
 
         # heavy query execution
         df = pd.read_sql(text(sql), engine)
