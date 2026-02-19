@@ -32,3 +32,9 @@ Docs: http://127.0.0.1:8000/docs
 ```sh
 ollama run llama3
 ```
+
+# Run Front End
+
+```sh
+streamlit run frontend/app.py
+```
