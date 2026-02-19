@@ -34,8 +34,10 @@ def ask_question(
     )
     db.add(q)
     db.commit()
+    db.refresh(q)
 
     return {
+        "query_id": q.id, 
         "generated_sql": sql,
         "preview_rows": preview
     }
@@ -52,3 +54,26 @@ def get_history(
         .all()
     )
     return queries
+
+@router.post("/preview-history")
+def preview_from_history(
+    query_id: int,
+    db: Session = Depends(get_db),
+    user_id: int = Depends(get_current_user)
+):
+    query = (
+        db.query(QueryHistory)
+        .filter(QueryHistory.id == query_id)
+        .filter(QueryHistory.user_id == user_id)
+        .first()
+    )
+
+    if not query:
+        raise Exception("Query not found")
+
+    preview = run_preview(query.sql_query)
+
+    return {
+        "generated_sql": query.sql_query,
+        "preview_rows": preview
+    }

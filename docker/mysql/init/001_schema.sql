@@ -51,3 +51,7 @@ CREATE TABLE orders (
     amount DECIMAL(10,2),
     order_date DATE
 );
+
+ALTER TABLE export_jobs
+ADD COLUMN session_id VARCHAR(64) NULL,
+ADD COLUMN query_id INT NULL;

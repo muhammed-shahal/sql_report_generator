@@ -29,8 +29,11 @@ class QueryHistory(Base):
 
 class ExportJob(Base):
     __tablename__ = "export_jobs"
+
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer)
+    session_id = Column(String(64), nullable=True)
+    query_id = Column(Integer, nullable=True)
     query_hash = Column(String(64))
     sql_query = Column(Text)
     status = Column(String(50))
