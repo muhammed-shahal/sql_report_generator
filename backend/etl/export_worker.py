@@ -1,3 +1,6 @@
+import os
+import uuid
+from datetime import datetime
 import pandas as pd
 from sqlalchemy import text
 from backend.db.database import engine, SessionLocal
@@ -10,21 +13,32 @@ def run_export_job(job_id: int, user_id: int, sql: str):
     db = SessionLocal()
 
     try:
-        # mark running
+        # 1️⃣ mark job as running
         job = db.query(ExportJob).get(job_id)
         job.status = "running"
         db.commit()
 
-        # clean sql
+        # 2️⃣ clean SQL (remove semicolon / code blocks)
         sql = clean_sql(sql)
 
-        # heavy query execution
+        # 3️⃣ execute heavy query
         df = pd.read_sql(text(sql), engine)
 
-        file_path = f"{EXPORT_DIR}/{user_id}_report_{job_id}.csv"
+        # 4️⃣ ensure exports/user_X folder exists
+        user_folder = os.path.join(EXPORT_DIR, f"user_{user_id}")
+        os.makedirs(user_folder, exist_ok=True)
+
+        # 5️⃣ generate unique filename
+        timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+        short_uuid = uuid.uuid4().hex[:6]
+        filename = f"{timestamp}_{job_id}_{short_uuid}.csv"
+
+        file_path = os.path.join(user_folder, filename)
+
+        # 6️⃣ save CSV
         df.to_csv(file_path, index=False)
 
-        # mark completed
+        # 7️⃣ mark job completed
         job.status = "completed"
         job.file_path = file_path
         db.commit()
