@@ -81,7 +81,7 @@ def export_from_session(
 
     background_tasks.add_task(run_export_job, job.id, user_id, sql)
 
-    return {"job_id": job.id, "message":"sucess"}
+    return {"job_id": job.id, "message":"success"}
 
 @router.post("/history")
 def export_from_history(
@@ -134,4 +134,4 @@ def export_from_history(
 
     background_tasks.add_task(run_export_job, job.id, user_id, sql)
 
-    return {"job_id": job.id, "message":"sucess"}
+    return {"job_id": job.id, "message":"success"}

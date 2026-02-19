@@ -29,7 +29,9 @@ Docs: http://127.0.0.1:8000/docs
 # Install LLM
 
 ```sh
-ollama run llama3
+sudo apt-get install zstd
+curl -fsSL https://ollama.com/install.sh | sh
+ollama pull llama3
 ```
 
 # Run Backend
