@@ -79,7 +79,7 @@ def export_from_session(
     db.commit()
     db.refresh(job)
 
-    background_tasks.add_task(run_export_job, job.id, sql)
+    background_tasks.add_task(run_export_job, job.id, user_id, sql)
 
     return {"job_id": job.id}
 
@@ -132,6 +132,6 @@ def export_from_history(
     db.commit()
     db.refresh(job)
 
-    background_tasks.add_task(run_export_job, job.id, sql)
+    background_tasks.add_task(run_export_job, job.id, user_id, sql)
 
     return {"job_id": job.id}
